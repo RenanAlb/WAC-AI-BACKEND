@@ -60,7 +60,9 @@ app.post("/ask-wac-ai", async (req, res) => {
 
   let dataAPI;
   try {
-    const response = await fetch("http://localhost:5123/person");
+    const response = await fetch(
+      "https://web-api-csharp-backend.onrender.com/person"
+    );
     if (!response.ok) throw new Error("Erro ao buscar informações da AI");
 
     const data = await response.json();
