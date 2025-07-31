@@ -75,23 +75,29 @@ app.post("/ask-wac-ai", async (req, res) => {
 
     const data = await response.json();
     console.log("Dados recebidos:", data);
-    dataAPI = data;
+
+    const list = data
+      .map((user) => `nome: ${user.name} id: ${user.id}`)
+      .join("\n");
+
+    console.log("LISTA: ", list);
+
+    chatHistory.push({
+      role: "system",
+      content: `
+    Aqui você recebe lista mais atualizada das pessoas cadastradas na tabela a cada pergunta do usuário (caso seja necessário seu uso):
+
+    ${list}
+
+    Observações: 
+    - Se estiver vazio [] significa que os dados no banco de dados foram resetados.
+  `,
+    });
   } catch (error) {
     console.error("Erro no fetch:", error);
     dataAPI = [];
   }
 
-  chatHistory.push({
-    role: "system",
-    content: `
-    Aqui você recebe lista mais atualizada das pessoas cadastradas na tabela a cada pergunta do usuário (caso seja necessário seu uso):
-
-    ${dataAPI}
-
-    Observações: 
-    - Se estiver vazio [] significa que os dados no banco de dados foram resetados.
-  `,
-  });
   chatHistory.push({ role: "user", content: question });
 
   try {
