@@ -70,6 +70,7 @@ app.post("/ask-wac-ai", async (req, res) => {
     dataAPI = data;
   } catch (error) {
     console.error(error);
+    dataAPI = [];
   }
 
   chatHistory.push({
