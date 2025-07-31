@@ -63,13 +63,21 @@ app.post("/ask-wac-ai", async (req, res) => {
     const response = await fetch(
       "https://web-api-csharp-backend.onrender.com/person"
     );
-    if (!response.ok) throw new Error("Erro ao buscar informações da AI");
+
+    console.log("Status:", response.status);
+    console.log("StatusText:", response.statusText);
+
+    if (!response.ok) {
+      const text = await response.text();
+      console.error("Resposta de erro do backend C#:", text);
+      throw new Error("Erro ao buscar informações da AI");
+    }
 
     const data = await response.json();
-
+    console.log("Dados recebidos:", data);
     dataAPI = data;
   } catch (error) {
-    console.error(error);
+    console.error("Erro no fetch:", error);
     dataAPI = [];
   }
 
