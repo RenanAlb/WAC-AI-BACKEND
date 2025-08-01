@@ -188,13 +188,12 @@ app.post("/ask-wac-ai", async (req, res) => {
         );
 
         resultadoAcao = await fetch(
-          "https://web-api-csharp-backend.onrender.com/person",
+          `https://web-api-csharp-backend.onrender.com/person/${aiData.acao.argumentos.id_pessoa}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               name: aiData.acao.argumentos.nome_pessoa,
-              id: aiData.acao.argumentos.id_pessoa,
             }),
           }
         ).then(tratarResposta);
