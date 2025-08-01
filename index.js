@@ -111,7 +111,6 @@ app.post("/ask-wac-ai", async (req, res) => {
     console.log("Atualizando memória...");
   } catch (error) {
     console.error("Erro no fetch:", error);
-    dataAPI = [];
   }
   // Chamada Web API C#
 
@@ -149,7 +148,7 @@ app.post("/ask-wac-ai", async (req, res) => {
 
     let resultadoAcao = null;
     if (aiData.acao) {
-      if (aiData.acao.nome_funcao === "createUser") {
+      if (aiData.acao.nome_funcao === "addUser") {
         console.log(
           "Wac AI está criando um novo usuário: ",
           aiData.acao.argumentos.nome_pessoa
@@ -172,7 +171,7 @@ app.post("/ask-wac-ai", async (req, res) => {
         resultadoAcao = await fetch(
           "https://web-api-csharp-backend.onrender.com/person",
           {
-            method: "POST",
+            method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               name: aiData.acao.argumentos.nome_pessoa,
@@ -187,11 +186,10 @@ app.post("/ask-wac-ai", async (req, res) => {
         );
 
         resultadoAcao = await fetch(
-          "https://web-api-csharp-backend.onrender.com/person",
+          `https://web-api-csharp-backend.onrender.com/person/${aiData.acao.argumentos.id_pessoa}`,
           {
-            method: "POST",
+            method: "DELETE",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: aiData.acao.argumentos.id_pessoa }),
           }
         ).then((r) => r.json());
       }
