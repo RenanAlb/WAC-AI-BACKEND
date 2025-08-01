@@ -147,10 +147,29 @@ app.post("/ask-wac-ai", async (req, res) => {
     console.log("Ação solicitada: ", aiData.acao);
 
     let resultadoAcao = null;
+
+    async function tratarResposta(res) {
+      if (!res.ok) {
+        const textoErro = await res.text();
+        console.error(`Erro na API (${res.status}):`, textoErro);
+        return { erro: true, status: res.status, mensagem: textoErro };
+      }
+
+      try {
+        return await res.json();
+      } catch {
+        return {
+          erro: true,
+          status: res.status,
+          mensagem: "Resposta não é JSON",
+        };
+      }
+    }
+
     if (aiData.acao) {
       if (aiData.acao.nome_funcao === "addUser") {
         console.log(
-          "Wac AI está criando um novo usuário: ",
+          "Wac AI está criando um novo usuário:",
           aiData.acao.argumentos.nome_pessoa
         );
 
@@ -161,10 +180,10 @@ app.post("/ask-wac-ai", async (req, res) => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name: aiData.acao.argumentos.nome_pessoa }),
           }
-        ).then((r) => r.json());
+        ).then(tratarResposta);
       } else if (aiData.acao.nome_funcao === "updateUser") {
         console.log(
-          "Wac AI está atualizando o usuário: ",
+          "Wac AI está atualizando o usuário:",
           aiData.acao.argumentos.nome_pessoa
         );
 
@@ -178,10 +197,10 @@ app.post("/ask-wac-ai", async (req, res) => {
               id: aiData.acao.argumentos.id_pessoa,
             }),
           }
-        ).then((r) => r.json());
+        ).then(tratarResposta);
       } else if (aiData.acao.nome_funcao === "deleteUser") {
         console.log(
-          "Wac AI está deletando o usuário: ",
+          "Wac AI está deletando o usuário:",
           aiData.acao.argumentos.id_pessoa
         );
 
@@ -191,7 +210,7 @@ app.post("/ask-wac-ai", async (req, res) => {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
           }
-        ).then((r) => r.json());
+        ).then(tratarResposta);
       }
     }
 
@@ -201,7 +220,7 @@ app.post("/ask-wac-ai", async (req, res) => {
     res.status(200).json({
       message: "Sucesso! Resposta gerada da Wac AI!",
       ok: true,
-      answer: result,
+      answer: aiData.mensagem,
       acao_executada: resultadoAcao,
     });
   } catch (error) {
