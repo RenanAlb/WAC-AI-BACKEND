@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
 import fetch from "node-fetch";
+import sendEmail from "./nodemailer.js";
 
 // Configuração do dotenv
 dotenv.config();
@@ -48,6 +49,7 @@ const chatHistory = [
     Sua função:
     - Responder dúvidas sobre o sistema, frontend e backend.
     - Executar ações para adicionar, atualizar e remover pessoas na lista, quando solicitado.
+    - Enviar emails quando solicitado.
 
     📄 **Documentação do sistema:**
     ${documentation}
@@ -56,10 +58,12 @@ const chatHistory = [
     {
       "mensagem": "Texto natural para o usuário",
       "acao": {
-        "nome_funcao": "addUser | updateUser | deleteUser",
+        "nome_funcao": "addUser | updateUser | deleteUser | sendEmail",
         "argumentos": {
           "nome_pessoa": "Nome da pessoa OU null",
-          "id_pessoa": "ID da pessoa OU null"
+          "id_pessoa": "ID da pessoa OU null",
+          "email_destinatario": "Email para enviar a mensagem OU null",
+          "email_mensagem": "Conteúdo da mensagem do email OU null" 
         }
       }
     }
@@ -67,9 +71,9 @@ const chatHistory = [
     Regras:
     - Se o usuário não pedir nenhuma ação, coloque "acao": null.
     - "mensagem" deve ser sempre amigável, como se fosse uma conversa normal.
-    - Use apenas funções definidas: addUser, updateUser, deleteUser.
+    - Use apenas funções definidas: addUser, updateUser, deleteUser, sendEmail.
     - Se a ação não exigir algum argumento, defina-o como null.
-    - Retorne **apenas o JSON** sem explicações extras.
+    - Retorne **exclusivamente** o JSON, sem texto antes ou depois.
     `,
   },
 ];
@@ -210,6 +214,16 @@ app.post("/ask-wac-ai", async (req, res) => {
             headers: { "Content-Type": "application/json" },
           }
         ).then(tratarResposta);
+      } else if (aiData.acao.nome_funcao === "sendEmail") {
+        console.log("Wac AI está enviando um email...");
+
+        const info = await sendEmail(
+          aiData.acao.argumentos.email_destinatario,
+          aiData.acao.argumentos.email_mensagem
+        );
+
+        console.log("E-mail enviado:", info.response);
+        resultadoAcao = info;
       }
     }
 
