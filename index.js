@@ -88,7 +88,6 @@ app.post("/ask-wac-ai", async (req, res) => {
       "https://web-api-csharp-backend.onrender.com/person"
     );
 
-    console.log("");
     if (!response.ok) {
       const text = await response.text();
       console.error("Resposta de erro do backend C#:", text);
@@ -104,17 +103,17 @@ app.post("/ask-wac-ai", async (req, res) => {
     chatHistory.push({
       role: "system",
       content: `
-    Aqui você recebe lista mais atualizada das pessoas cadastradas na tabela a cada pergunta do usuário (caso seja necessário seu uso):
+      Aqui você recebe lista mais atualizada das pessoas cadastradas na tabela a cada pergunta do usuário (caso seja necessário seu uso):
 
-    ${list}
+      ${list}
 
-    Observações: 
-    - Se estiver vazio [] significa que os dados no banco de dados foram resetados.
-  `,
+      Observações: 
+      - Se estiver vazio [] significa que os dados no banco de dados foram resetados.
+    `,
     });
     console.log("Atualizando memória...");
   } catch (error) {
-    console.error("Erro no fetch:", error);
+    console.error("Erro no fetch:", error.message);
   }
   // Chamada Web API C#
 
