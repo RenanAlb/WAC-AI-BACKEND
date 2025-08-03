@@ -75,6 +75,7 @@ const chatHistory = [
     - Use apenas funções definidas: addUser, updateUser, deleteUser, sendEmail.
     - Se a ação não exigir algum argumento, defina-o como null.
     - Retorne **exclusivamente** o JSON, sem texto antes ou depois.
+    - Retorne **somente** um JSON, sem textos antes ou depois. 
     `,
   },
 ];
