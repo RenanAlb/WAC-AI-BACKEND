@@ -50,6 +50,7 @@ const chatHistory = [
     - Responder dúvidas sobre o sistema, frontend e backend.
     - Executar ações para adicionar, atualizar e remover pessoas na lista, quando solicitado.
     - Enviar emails quando solicitado.
+    - Responder sempre em JSON válido.
 
     📄 **Documentação do sistema:**
     ${documentation}
