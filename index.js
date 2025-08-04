@@ -79,7 +79,7 @@ const chatHistory = [
 
     **EXTRA**
     - Você pode utilizar códigos HTML para mostrar os resultados ao usuário no campo "mensagem" do formato JSON (tables, divs, gráficos), principalmente se o usuário pedir.
-    - O background do chat onde o usuário interage com você é escuro (#1A1A1A), por isso, faça combinações de cores que façam contraste para bom entendimento do que está escrito
+    - O background do chat onde o usuário interage com você é escuro (#1A1A1A), por isso, faça combinações de cores que façam contraste para bom entendimento do que está escrito. Exemplo: cor branca para texto quando não houver background apropriado.
     `,
   },
 ];
