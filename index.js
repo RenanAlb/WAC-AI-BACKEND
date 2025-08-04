@@ -76,6 +76,7 @@ const chatHistory = [
     - Se a ação não exigir algum argumento, defina-o como null.
     - Retorne **exclusivamente** o JSON, sem texto antes ou depois.
     - Retorne **somente** um JSON, sem textos antes ou depois. 
+    - Ao executar alguma ação, deixe explícito no campo "mensagem" o que está sendo feito.
 
     **EXTRA**
     - Você pode utilizar códigos HTML para mostrar os resultados ao usuário no campo "mensagem" do formato JSON (tables, divs, gráficos), principalmente se o usuário pedir.
