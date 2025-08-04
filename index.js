@@ -78,7 +78,7 @@ const chatHistory = [
     - Retorne **somente** um JSON, sem textos antes ou depois. 
 
     **EXTRA**
-    Você pode utilizar códigos HTML para mostrar os resultados ao usuário (tables, divs, gráficos), principalmente se o usuário pedir.
+    Você pode utilizar códigos HTML para mostrar os resultados ao usuário no campo "mensagem" do formato JSON (tables, divs, gráficos), principalmente se o usuário pedir.
     `,
   },
 ];
