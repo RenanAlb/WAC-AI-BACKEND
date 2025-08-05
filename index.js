@@ -102,6 +102,7 @@ const getMessagesFromDataBase = async () => {
     - Retorne **exclusivamente** o JSON, sem texto antes ou depois.
     - Retorne **somente** um JSON, sem textos antes ou depois. 
     - Ao executar alguma ação, deixe explícito no campo "mensagem" o que está sendo feito.
+    - Ao enviar emails, certifique-se de que há algum email no campo "email_destinatario" e o conteúdo da mensagem em "email_mensagem" no JSON.
 
     **EXTRA**
     - Você pode utilizar códigos HTML para mostrar os resultados ao usuário no campo "mensagem" do formato JSON (tables, divs, gráficos), principalmente se o usuário pedir.
