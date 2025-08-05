@@ -87,18 +87,46 @@ const chatHistory = [
   },
 ];
 
+const addMessageToDataBase = async (role, content) => {
+  console.log(
+    `Adicionando mensagem => (${content}) do tipo => (${role}) para o banco de dados...`
+  );
+  try {
+    const addMessage = new Messages({
+      role,
+      content,
+    });
+
+    await addMessage.save();
+    console.log("Mensagem adicionada ao banco de dados!");
+  } catch (error) {
+    console.error("Erro ao adicionar a mensagem ao banco de dados:", error);
+  }
+};
+
+const getMessagesFromDataBase = async () => {
+  try {
+    const getMessages = await Messages.find();
+    console.log(getMessages);
+
+    if (getMessages.length !== 0) {
+      console.log("Mensagens buscadas!");
+      getMessages.map((e) =>
+        chatHistory.push({ role: e.role, content: e.content })
+      );
+    }
+  } catch (error) {
+    console.error("Erro ao buscar as mensagens do banco");
+    console.error(error);
+  }
+};
+
 // Rotas
 app.post("/ask-wac-ai", async (req, res) => {
   const { question } = req.body;
 
   console.log("Buscando conversas anteriores...");
-  try {
-    const getMessages = await Messages.find();
-    console.log(getMessages);
-  } catch (error) {
-    console.error("Erro ao buscar as mensagens do banco");
-    console.error(error);
-  }
+  await getMessagesFromDataBase();
 
   // try {
   //   const response = new Messages({
@@ -145,9 +173,13 @@ app.post("/ask-wac-ai", async (req, res) => {
   }
   // Chamada Web API C#
 
-  chatHistory.push({ role: "user", content: question });
   console.log("Atualizando memória...");
+  chatHistory.push({ role: "user", content: question });
 
+  // Adicionar mensagem ao banco de dados
+  await addMessageToDataBase("user", question);
+
+  // Chamando IA
   try {
     console.log("Gerando resposta...");
     const response = await fetch(`${process.env.OPENROUTER_URL}`, {
@@ -173,6 +205,9 @@ app.post("/ask-wac-ai", async (req, res) => {
     console.log("Resposta gerada: ", result);
 
     const aiData = JSON.parse(result);
+
+    // Adicionar mensagem da IA para o Database
+    await addMessageToDataBase("system", aiData);
 
     console.log("Mensagem para o usuário: ", aiData.mensagem);
     console.log("Ação solicitada: ", aiData.acao);
