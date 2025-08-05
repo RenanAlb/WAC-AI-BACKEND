@@ -5,9 +5,14 @@ import fs from "fs";
 import path from "path";
 import fetch from "node-fetch";
 import sendEmail from "./nodemailer.js";
+import connectToDataBase from "./database/mongodb.js";
+import Messages from "./modules/messages.js";
 
 // Configuração do dotenv
 dotenv.config();
+
+// Conexão MongoDB
+connectToDataBase();
 
 // Configuração do servidor
 const app = express();
@@ -88,6 +93,25 @@ const chatHistory = [
 // Rotas
 app.post("/ask-wac-ai", async (req, res) => {
   const { question } = req.body;
+
+  console.log("Buscando conversas anteriores...");
+  try {
+    const getMessages = await Messages.find();
+    console.log(getMessages);
+  } catch (error) {
+    console.error("Erro ao buscar as mensagens do banco");
+    console.error(error);
+  }
+
+  // try {
+  //   const response = new Messages({
+  //     messages: [{ role: "user", content: question }],
+  //   });
+
+  //   await response.save();
+  // } catch (error) {
+  //   console.error("Erro ao salvar a conversa", error);
+  // }
 
   // Chamada Web API C#
   try {
