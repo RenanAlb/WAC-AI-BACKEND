@@ -201,6 +201,13 @@ app.post("/ask-wac-ai", async (req, res) => {
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(
+        "Erro da API:",
+        response.status,
+        response.statusText,
+        errorText
+      );
       throw new Error("Erro ao chamar a API!");
     }
 
