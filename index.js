@@ -95,8 +95,8 @@ const addMessageToDataBase = async (role, content) => {
     const addMessage = new Messages({
       messages: [
         {
-          role,
-          content,
+          role: role,
+          content: content,
         },
       ],
     });
@@ -215,7 +215,7 @@ app.post("/ask-wac-ai", async (req, res) => {
     const aiData = JSON.parse(result);
 
     // Adicionar mensagem da IA para o Database
-    await addMessageToDataBase("system", aiData);
+    await addMessageToDataBase("system", aiData.mensagem);
 
     console.log("Mensagem para o usuário: ", aiData.mensagem);
     console.log("Ação solicitada: ", aiData.acao);
