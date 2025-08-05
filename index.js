@@ -11,9 +11,6 @@ import Messages from "./modules/messages.js";
 // Configuração do dotenv
 dotenv.config();
 
-// Conexão MongoDB
-connectToDataBase();
-
 // Configuração do servidor
 const app = express();
 const port = process.env.PORT || 8080;
@@ -273,6 +270,12 @@ app.post("/ask-wac-ai", async (req, res) => {
 });
 
 // Iniciar o servidor
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+const startServer = async () => {
+  await connectToDataBase(); // espera a conexão
+
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
+};
+
+startServer();
