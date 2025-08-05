@@ -117,7 +117,6 @@ const getMessagesFromDataBase = async () => {
     if (getMessages.length !== 0) {
       console.log("Mensagens buscadas!");
       getMessages.map((e) => {
-        console.log(e);
         chatHistory.push({
           role: e.messages[0].role,
           content: e.messages[0].content,
