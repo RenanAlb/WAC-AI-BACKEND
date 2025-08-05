@@ -43,8 +43,31 @@ app.use(
 );
 app.use(express.json());
 
-const chatHistory = [
-  {
+const chatHistory = [];
+
+const addMessageToDataBase = async (role, content) => {
+  console.log(
+    `Adicionando mensagem => (${content}) do tipo => (${role}) para o banco de dados...`
+  );
+  try {
+    const addMessage = new Messages({
+      messages: [
+        {
+          role: role,
+          content: content,
+        },
+      ],
+    });
+
+    await addMessage.save();
+    console.log("Mensagem adicionada ao banco de dados!");
+  } catch (error) {
+    console.error("Erro ao adicionar a mensagem ao banco de dados:", error);
+  }
+};
+
+const getMessagesFromDataBase = async () => {
+  chatHistory.push({
     role: "system",
     content: `
     Você é a Wac AI, uma assistente de IA simpática e especializada no sistema Web API C# (Wac = Web API C#).
@@ -84,31 +107,8 @@ const chatHistory = [
     - Você pode utilizar códigos HTML para mostrar os resultados ao usuário no campo "mensagem" do formato JSON (tables, divs, gráficos), principalmente se o usuário pedir.
     - O background do chat onde o usuário interage com você é escuro (#1A1A1A), por isso, faça combinações de cores que façam contraste para bom entendimento do que está escrito. Exemplo: cor branca para texto quando não houver background apropriado.
     `,
-  },
-];
+  });
 
-const addMessageToDataBase = async (role, content) => {
-  console.log(
-    `Adicionando mensagem => (${content}) do tipo => (${role}) para o banco de dados...`
-  );
-  try {
-    const addMessage = new Messages({
-      messages: [
-        {
-          role: role,
-          content: content,
-        },
-      ],
-    });
-
-    await addMessage.save();
-    console.log("Mensagem adicionada ao banco de dados!");
-  } catch (error) {
-    console.error("Erro ao adicionar a mensagem ao banco de dados:", error);
-  }
-};
-
-const getMessagesFromDataBase = async () => {
   try {
     const getMessages = await Messages.find();
     console.log(getMessages);
@@ -123,6 +123,8 @@ const getMessagesFromDataBase = async () => {
         });
       });
     }
+
+    return getMessages;
   } catch (error) {
     console.error("Erro ao buscar as mensagens do banco");
     console.error(error);
@@ -169,7 +171,7 @@ app.post("/ask-wac-ai", async (req, res) => {
   const { question } = req.body;
 
   console.log("Buscando conversas anteriores...");
-  await getMessagesFromDataBase();
+  const mensagensSalvas = await getMessagesFromDataBase();
 
   // Chamada Web API C#
   await getTableListUsers();
@@ -300,11 +302,14 @@ app.post("/ask-wac-ai", async (req, res) => {
     console.log("Atualizando a memória...");
     chatHistory.push({ role: "system", content: result });
 
+    chatHistory = [];
+
     res.status(200).json({
       message: "Sucesso! Resposta gerada da Wac AI!",
       ok: true,
       answer: aiData.mensagem,
       acao_executada: resultadoAcao,
+      history_messages: mensagensSalvas,
     });
   } catch (error) {
     console.error("Erro ao gerar resposta:", error);
