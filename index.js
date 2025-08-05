@@ -115,9 +115,10 @@ const getMessagesFromDataBase = async () => {
 
     if (getMessages.length !== 0) {
       console.log("Mensagens buscadas!");
-      getMessages.map((e) =>
-        chatHistory.push({ role: e.role, content: e.content })
-      );
+      getMessages.map((e) => {
+        console.log(e);
+        chatHistory.push({ role: e.role, content: e.content });
+      });
     }
   } catch (error) {
     console.error("Erro ao buscar as mensagens do banco");
@@ -125,24 +126,7 @@ const getMessagesFromDataBase = async () => {
   }
 };
 
-// Rotas
-app.post("/ask-wac-ai", async (req, res) => {
-  const { question } = req.body;
-
-  console.log("Buscando conversas anteriores...");
-  await getMessagesFromDataBase();
-
-  // try {
-  //   const response = new Messages({
-  //     messages: [{ role: "user", content: question }],
-  //   });
-
-  //   await response.save();
-  // } catch (error) {
-  //   console.error("Erro ao salvar a conversa", error);
-  // }
-
-  // Chamada Web API C#
+const getTableListUsers = async () => {
   try {
     const response = await fetch(
       "https://web-api-csharp-backend.onrender.com/person"
@@ -175,7 +159,17 @@ app.post("/ask-wac-ai", async (req, res) => {
   } catch (error) {
     console.error("Erro no fetch:", error.message);
   }
+};
+
+// Rotas
+app.post("/ask-wac-ai", async (req, res) => {
+  const { question } = req.body;
+
+  console.log("Buscando conversas anteriores...");
+  await getMessagesFromDataBase();
+
   // Chamada Web API C#
+  await getTableListUsers();
 
   console.log("Atualizando memória...");
   chatHistory.push({ role: "user", content: question });
