@@ -93,8 +93,12 @@ const addMessageToDataBase = async (role, content) => {
   );
   try {
     const addMessage = new Messages({
-      role,
-      content,
+      messages: [
+        {
+          role,
+          content,
+        },
+      ],
     });
 
     await addMessage.save();
