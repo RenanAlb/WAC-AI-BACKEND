@@ -302,7 +302,7 @@ app.post("/ask-wac-ai", async (req, res) => {
     console.log("Atualizando a memória...");
     chatHistory.push({ role: "system", content: result });
 
-    chatHistory = [];
+    chatHistory.splice(0, chatHistory.length);
 
     res.status(200).json({
       message: "Sucesso! Resposta gerada da Wac AI!",
