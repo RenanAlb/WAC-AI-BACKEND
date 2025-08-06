@@ -106,6 +106,7 @@ const getMessagesFromDataBase = async () => {
     **EXTRA**
     - Você pode utilizar códigos HTML para mostrar os resultados ao usuário no campo "mensagem" do formato JSON (tables, divs, gráficos), principalmente se o usuário pedir.
     - O background do chat onde o usuário interage com você é escuro (#1A1A1A), por isso, faça combinações de cores que façam contraste para bom entendimento do que está escrito. Exemplo: cor branca para texto quando não houver background apropriado.
+    - Utilize sempre algum background quando for compor um email ao usuário, pois há temas escuro e claro nas plataformas de email (como o Gmail) e isso pode afetar a experiência de usuário ao ler as mensagens no email.
     `,
   });
 
