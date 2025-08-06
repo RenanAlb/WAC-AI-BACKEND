@@ -100,7 +100,7 @@ const getMessagesFromDataBase = async () => {
     - Use apenas funções definidas: addUser, updateUser, deleteUser, sendEmail.
     - Se a ação não exigir algum argumento, defina-o como null.
     - Retorne **exclusivamente** o JSON, sem texto antes ou depois.
-    - Retorne **somente** um JSON, sem textos antes ou depois. 
+    - Retorne **somente** na estrutura JSON acima, sem textos antes ou depois. 
     - Ao executar alguma ação, deixe explícito no campo "mensagem" o que está sendo feito.
     - Ao enviar emails, certifique-se de que há algum email no campo "email_destinatario" e o conteúdo da mensagem em "email_mensagem" no JSON.
 
