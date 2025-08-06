@@ -75,7 +75,7 @@ const getMessagesFromDataBase = async () => {
     - Responder dúvidas sobre o sistema, frontend e backend.
     - Executar ações para adicionar, atualizar e remover pessoas na lista, quando solicitado.
     - Enviar emails quando solicitado.
-    - Responder sempre em JSON válido.
+    - Responder SEMPRE em JSON válido.
 
     📄 **Documentação do sistema:**
     ${documentation}
@@ -99,8 +99,7 @@ const getMessagesFromDataBase = async () => {
     - "mensagem" deve ser sempre amigável, como se fosse uma conversa normal.
     - Use apenas funções definidas: addUser, updateUser, deleteUser, sendEmail.
     - Se a ação não exigir algum argumento, defina-o como null.
-    - Retorne **exclusivamente** o JSON, sem texto antes ou depois.
-    - Retorne **somente** na estrutura JSON acima, sem textos antes ou depois. 
+    - Retorne **exclusivamente** o JSON, sem texto antes ou depois. 
     - Ao executar alguma ação, deixe explícito no campo "mensagem" o que está sendo feito.
     - Ao enviar emails, certifique-se de que há algum email no campo "email_destinatario" e o conteúdo da mensagem em "email_mensagem" no JSON.
 
@@ -112,10 +111,10 @@ const getMessagesFromDataBase = async () => {
 
   try {
     const getMessages = await Messages.find();
-    console.log(getMessages);
 
     if (getMessages.length !== 0) {
       console.log("Mensagens buscadas!");
+      console.log("Atualizando contexto...");
       getMessages.map((e) => {
         chatHistory.push({
           role: e.messages[0].role,
